@@ -47,18 +47,18 @@ class _MyHomePageState extends State<MyHomePage> {
   final inputAmount = TextEditingController();
 
   final List<Transaction> _userTransactions = [
-    Transaction(
-      id: "t1",
-      title: "Shoes",
-      amount: 12.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Mobile Phone",
-      amount: 150.00,
-      date: DateTime.now(),
-    ),
+    // Transaction(
+    //   id: "t1",
+    //   title: "Shoes",
+    //   amount: 12.99,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: "t2",
+    //   title: "Mobile Phone",
+    //   amount: 150.00,
+    //   date: DateTime.now(),
+    // ),
   ];
 
   void _dataSubmit() {
