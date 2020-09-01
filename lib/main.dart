@@ -1,3 +1,4 @@
+import 'package:expensetracker/widgets/chart.dart';
 import 'package:flutter/material.dart';
 import './models/transaction.dart';
 import './widgets/transaction_list.dart';
@@ -121,6 +122,12 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
+  List<Transaction> get _recentTrans {
+    return _userTransactions.where((index) {
+      return index.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,10 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                child: Card(
-                  child: Text("CHART"),
-                  color: Colors.amber,
-                ),
+                child: Chart(_recentTrans),
               ),
               TransactionList(_userTransactions),
             ]),
