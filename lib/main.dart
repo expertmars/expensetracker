@@ -1,4 +1,5 @@
 import 'package:expensetracker/widgets/chart.dart';
+import 'package:expensetracker/widgets/new_transaction.dart';
 import 'package:flutter/material.dart';
 import './models/transaction.dart';
 import './widgets/transaction_list.dart';
@@ -95,29 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
         context: ctx,
         builder: (_) {
           return Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                TextField(
-                  decoration: InputDecoration(labelText: "Item Name"),
-                  controller: inputTitle,
-                  onSubmitted: (_) {
-                    _dataSubmit();
-                  },
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: "Amount"),
-                  controller: inputAmount,
-                  keyboardType: TextInputType.number,
-                  onSubmitted: (_) => _dataSubmit(),
-                ),
-                FlatButton(
-                  onPressed: _dataSubmit,
-                  child: Text("Add Transaction"),
-                  textColor: Colors.purple,
-                )
-              ],
-            ),
+            child: NewTransaction(_newTransaction),
           );
         });
   }
@@ -133,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "New App",
+          "Expense Tracker",
         ),
         actions: [
           IconButton(
