@@ -20,11 +20,13 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.amber,
         fontFamily: "Quicksand",
         textTheme: ThemeData.light().textTheme.copyWith(
-                headline6: TextStyle(
-              fontFamily: 'OpenSans',
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-            )),
+              headline6: TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+              ),
+              button: TextStyle(color: Colors.white),
+            ),
         appBarTheme: AppBarTheme(
             textTheme: ThemeData.light().textTheme.copyWith(
                   headline6: TextStyle(
@@ -63,31 +65,21 @@ class _MyHomePageState extends State<MyHomePage> {
     // ),
   ];
 
-  void _dataSubmit() {
-    String textData = inputTitle.text;
-    double amountData = double.parse(inputAmount.text);
-
-    if (textData == null || amountData <= 0) {
-      return;
-    }
-
-    _newTransaction(
-      textData,
-      amountData,
-    );
-
-    Navigator.of(context).pop();
-  }
-
-  void _newTransaction(String txTitle, double txAmount) {
+  void _newTransaction(String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = new Transaction(
       title: txTitle,
       amount: txAmount,
       id: DateTime.now().toString(),
-      date: DateTime.now(),
+      date: chosenDate,
     );
     setState(() {
       _userTransactions.add(newTx);
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((item) => item.id == id);
     });
   }
 
@@ -112,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Expense Tracker",
+          "Personal Expense Tracker",
         ),
         actions: [
           IconButton(
@@ -136,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Container(
                 child: Chart(_recentTrans),
               ),
-              TransactionList(_userTransactions),
+              TransactionList(_userTransactions, _deleteTransaction),
             ]),
       ),
     );
