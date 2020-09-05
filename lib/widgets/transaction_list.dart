@@ -10,10 +10,9 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 450,
-      child: userTransactions.isEmpty
-          ? Column(
+    return userTransactions.isEmpty
+        ? LayoutBuilder(builder: (context, constraints) {
+            return Column(
               children: [
                 Text(
                   "No Transaction yet",
@@ -23,51 +22,58 @@ class TransactionList extends StatelessWidget {
                   height: 20,
                 ),
                 Container(
-                  height: 200,
+                  height: constraints.maxHeight * 0.6,
                   child: Image.asset(
                     'assets/images/waiting.png',
                     fit: BoxFit.cover,
                   ),
                 )
               ],
-            )
-          : ListView.builder(
-              itemCount: userTransactions.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 6,
-                  ),
-                  child: Card(
-                    elevation: 6,
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 30,
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: FittedBox(
-                              child: Text(
-                                  "\$${userTransactions[index].amount.toStringAsFixed(2)}")),
-                        ),
-                      ),
-                      title: Text(
-                        userTransactions[index].title,
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      subtitle: Text(DateFormat.yMMMd()
-                          .format(userTransactions[index].date)),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () =>
-                            deleteTransaction(userTransactions[index].id),
-                        color: Theme.of(context).errorColor,
+            );
+          })
+        : ListView.builder(
+            itemCount: userTransactions.length,
+            itemBuilder: (context, index) {
+              return Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 6,
+                ),
+                child: Card(
+                  elevation: 6,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: FittedBox(
+                            child: Text(
+                                "\$${userTransactions[index].amount.toStringAsFixed(2)}")),
                       ),
                     ),
+                    title: Text(
+                      userTransactions[index].title,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    subtitle: Text(DateFormat.yMMMd()
+                        .format(userTransactions[index].date)),
+                    trailing: MediaQuery.of(context).size.width > 400
+                        ? FlatButton.icon(
+                            icon: Icon(Icons.delete),
+                            onPressed: () =>
+                                deleteTransaction(userTransactions[index].id),
+                            textColor: Theme.of(context).errorColor,
+                            label: Text("Delete"))
+                        : IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () =>
+                                deleteTransaction(userTransactions[index].id),
+                            color: Theme.of(context).errorColor,
+                          ),
                   ),
-                );
-              },
-            ),
-    );
+                ),
+              );
+            },
+          );
   }
 }

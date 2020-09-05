@@ -56,44 +56,53 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        TextField(
-          decoration: InputDecoration(labelText: "Item Name"),
-          controller: inputTitle,
-          onSubmitted: (_) {
-            _submitData();
-          },
-        ),
-        TextField(
-          decoration: InputDecoration(labelText: "Amount"),
-          controller: inputAmount,
-          keyboardType: TextInputType.number,
-          onSubmitted: (_) => _submitData(),
-        ),
-        Container(
-          height: 70,
-          child: Row(
-            children: [
-              Text(_pickedDate == null
-                  ? "No date chosen!"
-                  : "Picked Date: ${DateFormat.yMd().format(_pickedDate)}"),
-              FlatButton(
-                child: Text("Pick a date"),
-                onPressed: _presentDatePicker,
-                textColor: Theme.of(context).primaryColor,
-              )
-            ],
+    return Container(
+      padding: EdgeInsets.only(
+        top: 10,
+        left: 10,
+        right: 10,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          TextField(
+            decoration: InputDecoration(labelText: "Item Name"),
+            controller: inputTitle,
+            onSubmitted: (_) {
+              _submitData();
+            },
           ),
-        ),
-        RaisedButton(
-          onPressed: _submitData,
-          child: Text("Add Transaction"),
-          color: Theme.of(context).primaryColor,
-          textColor: Theme.of(context).buttonColor,
-        )
-      ],
+          TextField(
+            decoration: InputDecoration(labelText: "Amount"),
+            controller: inputAmount,
+            keyboardType: TextInputType.number,
+            onSubmitted: (_) => _submitData(),
+          ),
+          Container(
+            height: 70,
+            child: Row(
+              children: [
+                Text(_pickedDate == null
+                    ? "No date chosen!"
+                    : "Picked Date: ${DateFormat.yMd().format(_pickedDate)}"),
+                FlatButton(
+                  child: Text("Pick a date"),
+                  onPressed: _presentDatePicker,
+                  textColor: Theme.of(context).primaryColor,
+                )
+              ],
+            ),
+          ),
+          RaisedButton(
+            onPressed: _submitData,
+            child: Text("Add Transaction"),
+            color: Theme.of(context).primaryColor,
+            textColor: Theme.of(context).buttonColor,
+          )
+        ],
+      ),
     );
   }
 }

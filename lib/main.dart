@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //   date: DateTime.now(),
     // ),
   ];
-
+  bool _showChart = false;
   void _newTransaction(String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = new Transaction(
       title: txTitle,
@@ -85,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _startAddTransaction(BuildContext ctx) {
     showModalBottomSheet(
+        isScrollControlled: true,
         context: ctx,
         builder: (_) {
           return Card(
@@ -101,18 +102,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Personal Expense Tracker",
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _startAddTransaction(context),
-          )
-        ],
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+
+    final appBar = AppBar(
+      title: Text(
+        "Expense Tracker",
       ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _startAddTransaction(context),
+        )
+      ],
+    );
+    final txList = Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.7,
+        child: TransactionList(_userTransactions, _deleteTransaction));
+    return Scaffold(
+      appBar: appBar,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _startAddTransaction(context);
@@ -125,10 +136,39 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                child: Chart(_recentTrans),
-              ),
-              TransactionList(_userTransactions, _deleteTransaction),
+              if (!isLandscape)
+                Container(
+                  height: (mediaQuery.size.height -
+                          appBar.preferredSize.height -
+                          mediaQuery.padding.top) *
+                      0.3,
+                  child: Chart(_recentTrans),
+                ),
+              if (!isLandscape) txList,
+              if (isLandscape)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Show Chart"),
+                    Switch(
+                        value: _showChart,
+                        onChanged: (val) {
+                          setState(() {
+                            _showChart = val;
+                          });
+                        })
+                  ],
+                ),
+              if (isLandscape)
+                _showChart
+                    ? Container(
+                        height: (mediaQuery.size.height -
+                                appBar.preferredSize.height -
+                                mediaQuery.padding.top) *
+                            0.7,
+                        child: Chart(_recentTrans),
+                      )
+                    : txList
             ]),
       ),
     );
